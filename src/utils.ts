@@ -40,7 +40,7 @@ export function writeSvgContent(filter: Filter, treeViewProvider: FilterTreeView
 function str2Uint8(str: string): Uint8Array {
     var buf = new ArrayBuffer(str.length);
     var bufView = new Uint8Array(buf);//TODO: check if can just use str.length
-    for (var i=0, strLen=str.length; i < strLen; i++) {
+    for (var i = 0, strLen = str.length; i < strLen; i++) {
         bufView[i] = str.charCodeAt(i);
     }
     return bufView;

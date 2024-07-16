@@ -6,11 +6,11 @@ export function applyHighlight(state: State, editors: vscode.TextEditor[]): void
     // remove old decorations from all the text editor using the given decorationType
     state.decorations.forEach(decorationType => decorationType.dispose());
     state.decorations = [];
-    
+
     editors.forEach((editor) => {
         let sourceCode = editor.document.getText();
         const sourceCodeArr = sourceCode.split("\n");
-        
+
         //apply new decorations
         state.filterArr.forEach((filter) => {
             let filterCount = 0;
@@ -24,7 +24,7 @@ export function applyHighlight(state: State, editors: vscode.TextEditor[]): void
                     }
                 }
                 filterCount = lineNumbers.length;
-                
+
                 const decorationsArray = lineNumbers.map((lineIdx) => {
                     return new vscode.Range(
                         new vscode.Position(lineIdx, 0),
@@ -47,7 +47,6 @@ export function applyHighlight(state: State, editors: vscode.TextEditor[]): void
             }
         });
     });
-    
 }
 
 //record the important fields of each filter on a json object and open a new tab for the json
@@ -68,47 +67,47 @@ export function exportFilters(state: State) {
 
 //open a selected json file and parse each filter to add back
 export function importFilters(state: State) {
-        vscode.window.showOpenDialog({
-            canSelectFiles: true, 
-            canSelectMany: false, 
-            filters: {
-                "json": ["json"]
+    vscode.window.showOpenDialog({
+        canSelectFiles: true,
+        canSelectMany: false,
+        filters: {
+            "json": ["json"]
+        }
+    }).then(uriArr => {
+        if (!uriArr) {
+            return;
+        }
+        return vscode.workspace.openTextDocument(uriArr[0]);
+    }).then(textDocument => {
+        const text = textDocument!.getText();
+        const parsed = JSON.parse(text);
+        if (typeof parsed !== "object") {
+            return;
+        }
+        const array = parsed as any[];
+        array.forEach((filterText) => {
+            if (
+                (typeof filterText.regexText === "string") &&
+                (typeof filterText.color === "string") &&
+                (typeof filterText.isHighlighted === "boolean") &&
+                (typeof filterText.isShown === "boolean")
+            ) {
+                const id = `${Math.random()}`;
+                const filter = {
+                    regex: new RegExp(filterText.regexText),
+                    color: filterText.color as string,
+                    isHighlighted: filterText.isHighlighted as boolean,
+                    isShown: filterText.isShown as boolean,
+                    id,
+                    iconPath: generateSvgUri(state.storageUri, id, filterText.isHighlighted),
+                    count: 0
+                };
+                state.filterArr.push(filter);
+                writeSvgContent(filter, state.filterTreeViewProvider);
             }
-        }).then(uriArr => {
-            if (!uriArr) {
-                return;
-            }
-            return vscode.workspace.openTextDocument(uriArr[0]);
-        }).then(textDocument => {
-            const text = textDocument!.getText();
-            const parsed = JSON.parse(text);
-            if (typeof parsed !== "object") {
-                return;
-            }
-            const array = parsed as any[];
-            array.forEach((filterText) => {
-                if (
-                    (typeof filterText.regexText === "string") &&
-                    (typeof filterText.color === "string") &&
-                    (typeof filterText.isHighlighted === "boolean") &&
-                    (typeof filterText.isShown === "boolean")
-                ) {
-                    const id = `${Math.random()}`;
-                    const filter = {
-                        regex: new RegExp(filterText.regexText),
-                        color: filterText.color as string,
-                        isHighlighted: filterText.isHighlighted as boolean,
-                        isShown: filterText.isShown as boolean,
-                        id,
-                        iconPath: generateSvgUri(state.storageUri, id, filterText.isHighlighted),
-                        count: 0
-                    };
-                    state.filterArr.push(filter);
-                    writeSvgContent(filter, state.filterTreeViewProvider);
-                }
-            });
-            refreshEditors(state);
         });
+        refreshEditors(state);
+    });
 }
 
 //set bool for whether the lines matched the given filter will be kept for focus mode
@@ -136,7 +135,6 @@ export function turnOnFocusMode(state: State) {
         //because of the special schema, openTextDocument will use the focusProvider
         vscode.workspace.openTextDocument(virtualUri).then(doc => vscode.window.showTextDocument(doc));
     }
-    
 }
 
 export function deleteFilter(filterTreeItem: vscode.TreeItem, state: State) {
@@ -155,8 +153,8 @@ export function addFilter(state: State) {
         }
         const id = `${Math.random()}`;
         const filter = {
-            isHighlighted: true, 
-            isShown: true, 
+            isHighlighted: true,
+            isShown: true,
             regex: new RegExp(regexStr),
             color: generateRandomColor(),
             id,
@@ -194,9 +192,9 @@ export function setHighlight(isHighlighted: boolean, filterTreeItem: vscode.Tree
     writeSvgContent(filter!, state.filterTreeViewProvider);
 }
 
-//refresh every visible component, including: 
+//refresh every visible component, including:
 //document content of the visible focus mode virtual document,
-//decoration of the visible focus mode virtual document, 
+//decoration of the visible focus mode virtual document,
 //highlight decoration of visible editors
 //treeview on the side bar
 export function refreshEditors(state: State) {

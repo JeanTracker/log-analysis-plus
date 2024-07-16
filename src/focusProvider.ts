@@ -43,5 +43,4 @@ export class FocusProvider implements vscode.TextDocumentContentProvider {
     refresh(uri: vscode.Uri): void {
         this.onDidChangeEmitter.fire(uri);
     }
-  
 }

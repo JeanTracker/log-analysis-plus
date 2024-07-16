@@ -52,7 +52,7 @@
 			},
 			{
 				"command": "log-analysis-plus.editFilter",
-				"title": "Edit Regex for This Filter", 
+				"title": "Edit Regex for This Filter",
 				"icon": "$(edit)"
 			},
 			{
@@ -122,13 +122,14 @@
 					"when": "view == filters.plus"
 				}
 			]
-
 		},
-		"keybindings": [{
-			"command": "log-analysis-plus.turnOnFocusMode",
-			"key": "ctrl+h",
-			"mac": "cmd+h"
-		}],
+		"keybindings": [
+			{
+				"command": "log-analysis-plus.turnOnFocusMode",
+				"key": "ctrl+h",
+				"mac": "cmd+h"
+			}
+		],
 		"views": {
 			"explorer": [
 				{
@@ -136,7 +137,7 @@
 					"name": "Filters+"
 				}
 			]
-    }
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

@@ -12,7 +12,7 @@ export type State = {
     decorations: vscode.TextEditorDecorationType[];
     disposableFoldingRange: vscode.Disposable | null;
     filterTreeViewProvider: FilterTreeViewProvider;
-    focusProvider:FocusProvider
+    focusProvider: FocusProvider
     storageUri: vscode.Uri;
 };
 
@@ -20,14 +20,13 @@ export function activate(context: vscode.ExtensionContext) {
     storageUri = context.globalStorageUri; //get the store path
     cleanUpIconFiles(storageUri); //clean up the old icon files
 
-        
     //internal globals
-    const filterArr: Filter[] = []; 
+    const filterArr: Filter[] = [];
     const state: State = {
         inFocusMode: false,
         filterArr,
         decorations: [],
-        disposableFoldingRange: null, 
+        disposableFoldingRange: null,
         filterTreeViewProvider: new FilterTreeViewProvider(filterArr),
         focusProvider: new FocusProvider(filterArr),
         storageUri
@@ -37,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
     //register filterTreeViewProvider under id 'filters' which gets attached
     //to the file explorer according to package.json's contributes>views>explorer
     vscode.window.registerTreeDataProvider('filters.plus', state.filterTreeViewProvider);
-    
+
     //Add events listener
     var disposableOnDidChangeVisibleTextEditors = vscode.window.onDidChangeVisibleTextEditors(event => {
         refreshEditors(state);
@@ -58,12 +57,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     //register commands
     let disposableExport = vscode.commands.registerCommand(
-        "log-analysis-plus.exportFilters", 
+        "log-analysis-plus.exportFilters",
         () => exportFilters(state));
     context.subscriptions.push(disposableExport);
 
     let disposableImport = vscode.commands.registerCommand(
-        "log-analysis-plus.importFilters", 
+        "log-analysis-plus.importFilters",
         () => importFilters(state));
     context.subscriptions.push(disposableImport);
 
@@ -78,7 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
         (filterTreeItem: vscode.TreeItem) => setVisibility(false, filterTreeItem, state)
     );
     context.subscriptions.push(disposableDisableVisibility);
-    
+
     let disposableTurnOnFocusMode = vscode.commands.registerCommand(
         "log-analysis-plus.turnOnFocusMode",
         () => turnOnFocusMode(state)

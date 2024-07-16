@@ -4,7 +4,7 @@ import { Filter } from "./utils";
 //provides filters as tree items to be displayed on the sidebar
 export class FilterTreeViewProvider implements vscode.TreeDataProvider<FilterItem> {
 
-    constructor(private filterArr:Filter[]) {}
+    constructor(private filterArr: Filter[]) { }
 
     getTreeItem(element: FilterItem): vscode.TreeItem {
         return element;
@@ -22,7 +22,7 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<FilterIte
 
     private _onDidChangeTreeData: vscode.EventEmitter<FilterItem | undefined> = new vscode.EventEmitter<FilterItem | undefined>();
     readonly onDidChangeTreeData: vscode.Event<FilterItem | undefined> = this._onDidChangeTreeData.event;
-    
+
     refresh(): void {
         console.log("in refresh");
         this._onDidChangeTreeData.fire(undefined);
@@ -39,7 +39,6 @@ export class FilterItem extends vscode.TreeItem {
         this.label = filter.regex.toString();
         this.id = filter.id;
         this.iconPath = filter.iconPath;
-        
 
         if (filter.isHighlighted) {
             if (filter.isShown) {
