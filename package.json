@@ -1,11 +1,11 @@
 {
-	"name": "log-analysis",
-	"displayName": "Log Analysis",
-	"description": "Add highlights and filters to help log analysis",
-	"publisher": "XinyaYang0506",
+	"name": "log-analysis-plus",
+	"displayName": "Log Analysis+",
+	"description": "Advanced filtering and highlighting capabilities for more efficient log analysis",
+	"publisher": "JeanTracker",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/XinyaYang0506/log-analysis.git"
+		"url": "https://github.com/JeanTracker/log-analysis-plus.git"
 	},
 	"version": "1.1.0",
 	"engines": {
@@ -21,119 +21,119 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "log-analysis.enableHighlight",
+				"command": "log-analysis-plus.enableHighlight",
 				"title": "Enable Highlight",
 				"icon": "$(paintcan)"
 			},
 			{
-				"command": "log-analysis.disableHighlight",
+				"command": "log-analysis-plus.disableHighlight",
 				"title": "Disable Highlight",
 				"icon": "$(paintcan)"
 			},
 			{
-				"command": "log-analysis.enableVisibility",
+				"command": "log-analysis-plus.enableVisibility",
 				"title": "Enable Visbility",
 				"icon": "$(eye)"
 			},
 			{
-				"command": "log-analysis.disableVisibility",
+				"command": "log-analysis-plus.disableVisibility",
 				"title": "Disable Visbility",
 				"icon": "$(eye-closed)"
 			},
 			{
-				"command": "log-analysis.turnOnFocusMode",
+				"command": "log-analysis-plus.turnOnFocusMode",
 				"title": "Turn on Focus Mode",
 				"icon": "$(symbol-keyword)"
 			},
 			{
-				"command": "log-analysis.deleteFilter",
+				"command": "log-analysis-plus.deleteFilter",
 				"title": "Delete This Filter",
 				"icon": "$(dialog-close)"
 			},
 			{
-				"command": "log-analysis.editFilter",
+				"command": "log-analysis-plus.editFilter",
 				"title": "Edit Regex for This Filter", 
 				"icon": "$(edit)"
 			},
 			{
-				"command": "log-analysis.addFilter",
+				"command": "log-analysis-plus.addFilter",
 				"title": "Add a Filter",
 				"icon": "$(plus)"
 			},
 			{
-				"command": "log-analysis.exportFilters",
+				"command": "log-analysis-plus.exportFilters",
 				"title": "Export Filters"
 			},
 			{
-				"command": "log-analysis.importFilters",
+				"command": "log-analysis-plus.importFilters",
 				"title": "Import Filters"
 			}
 		],
 		"menus": {
 			"view/item/context": [
 				{
-					"command": "log-analysis.editFilter",
-					"when": "view == filters",
+					"command": "log-analysis-plus.editFilter",
+					"when": "view == filters.plus",
 					"group": "inline@1"
 				},
 				{
-					"command": "log-analysis.disableHighlight",
-					"when": "view == filters && viewItem =~ /^lit/",
+					"command": "log-analysis-plus.disableHighlight",
+					"when": "view == filters.plus && viewItem =~ /^lit/",
 					"group": "inline@2"
 				},
 				{
-					"command": "log-analysis.enableHighlight",
-					"when": "view == filters && viewItem =~ /^unlit/",
+					"command": "log-analysis-plus.enableHighlight",
+					"when": "view == filters.plus && viewItem =~ /^unlit/",
 					"group": "inline@3"
 				},
 				{
-					"command": "log-analysis.disableVisibility",
-					"when": "view == filters && viewItem =~ /-visible/",
+					"command": "log-analysis-plus.disableVisibility",
+					"when": "view == filters.plus && viewItem =~ /-visible/",
 					"group": "inline@4"
 				},
 				{
-					"command": "log-analysis.enableVisibility",
-					"when": "view == filters && viewItem =~ /-invisible/",
+					"command": "log-analysis-plus.enableVisibility",
+					"when": "view == filters.plus && viewItem =~ /-invisible/",
 					"group": "inline@5"
 				},
 				{
-					"command": "log-analysis.deleteFilter",
+					"command": "log-analysis-plus.deleteFilter",
 					"when": "view == filters",
 					"group": "inline@6"
 				}
 			],
 			"view/title": [
 				{
-					"command": "log-analysis.addFilter",
-					"when": "view == filters",
+					"command": "log-analysis-plus.addFilter",
+					"when": "view == filters.plus",
 					"group": "navigation"
 				},
 				{
-					"command": "log-analysis.turnOnFocusMode",
-					"when": "view == filters",
+					"command": "log-analysis-plus.turnOnFocusMode",
+					"when": "view == filters.plus",
 					"group": "navigation"
 				},
 				{
-					"command": "log-analysis.importFilters",
-					"when": "view == filters"
+					"command": "log-analysis-plus.importFilters",
+					"when": "view == filters.plus"
 				},
 				{
-					"command": "log-analysis.exportFilters",
-					"when": "view == filters"
+					"command": "log-analysis-plus.exportFilters",
+					"when": "view == filters.plus"
 				}
 			]
 
 		},
 		"keybindings": [{
-			"command": "log-analysis.turnOnFocusMode",
+			"command": "log-analysis-plus.turnOnFocusMode",
 			"key": "ctrl+h",
 			"mac": "cmd+h"
 		}],
 		"views": {
 			"explorer": [
 				{
-					"id": "filters",
-					"name": "Filters"
+					"id": "filters.plus",
+					"name": "Filters+"
 				}
 			]
     }

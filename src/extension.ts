@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.registerTextDocumentContentProvider('focus', state.focusProvider);
     //register filterTreeViewProvider under id 'filters' which gets attached
     //to the file explorer according to package.json's contributes>views>explorer
-    vscode.window.registerTreeDataProvider('filters', state.filterTreeViewProvider);
+    vscode.window.registerTreeDataProvider('filters.plus', state.filterTreeViewProvider);
     
     //Add events listener
     var disposableOnDidChangeVisibleTextEditors = vscode.window.onDidChangeVisibleTextEditors(event => {
@@ -58,59 +58,59 @@ export function activate(context: vscode.ExtensionContext) {
 
     //register commands
     let disposableExport = vscode.commands.registerCommand(
-        "log-analysis.exportFilters", 
+        "log-analysis-plus.exportFilters", 
         () => exportFilters(state));
     context.subscriptions.push(disposableExport);
 
     let disposableImport = vscode.commands.registerCommand(
-        "log-analysis.importFilters", 
+        "log-analysis-plus.importFilters", 
         () => importFilters(state));
     context.subscriptions.push(disposableImport);
 
     let disposableEnableVisibility = vscode.commands.registerCommand(
-        "log-analysis.enableVisibility",
+        "log-analysis-plus.enableVisibility",
         (filterTreeItem: vscode.TreeItem) => setVisibility(true, filterTreeItem, state)
     );
     context.subscriptions.push(disposableEnableVisibility);
 
     let disposableDisableVisibility = vscode.commands.registerCommand(
-        "log-analysis.disableVisibility",
+        "log-analysis-plus.disableVisibility",
         (filterTreeItem: vscode.TreeItem) => setVisibility(false, filterTreeItem, state)
     );
     context.subscriptions.push(disposableDisableVisibility);
     
     let disposableTurnOnFocusMode = vscode.commands.registerCommand(
-        "log-analysis.turnOnFocusMode",
+        "log-analysis-plus.turnOnFocusMode",
         () => turnOnFocusMode(state)
     );
     context.subscriptions.push(disposableTurnOnFocusMode);
 
     let disposibleAddFilter = vscode.commands.registerCommand(
-        "log-analysis.addFilter",
+        "log-analysis-plus.addFilter",
         () => addFilter(state)
     );
     context.subscriptions.push(disposibleAddFilter);
 
     let disposibleEditFilter = vscode.commands.registerCommand(
-        "log-analysis.editFilter",
+        "log-analysis-plus.editFilter",
         (filterTreeItem: vscode.TreeItem) => editFilter(filterTreeItem, state)
     );
     context.subscriptions.push(disposibleEditFilter);
 
     let disposibleDeleteFilter = vscode.commands.registerCommand(
-        "log-analysis.deleteFilter",
+        "log-analysis-plus.deleteFilter",
         (filterTreeItem: vscode.TreeItem) => deleteFilter(filterTreeItem, state)
     );
     context.subscriptions.push(disposibleDeleteFilter);
 
     let disposibleEnableHighlight = vscode.commands.registerCommand(
-        "log-analysis.enableHighlight",
+        "log-analysis-plus.enableHighlight",
         (filterTreeItem: vscode.TreeItem) => setHighlight(true, filterTreeItem, state)
     );
     context.subscriptions.push(disposibleEnableHighlight);
 
     let disposibleDisableHighlight = vscode.commands.registerCommand(
-        "log-analysis.disableHighlight",
+        "log-analysis-plus.disableHighlight",
         (filterTreeItem: vscode.TreeItem) => setHighlight(false, filterTreeItem, state)
     );
     context.subscriptions.push(disposibleDisableHighlight);
