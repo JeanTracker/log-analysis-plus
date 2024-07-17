@@ -221,3 +221,12 @@ export function refreshEditors(state: State) {
     console.log("refreshEditos");
     state.filterTreeViewProvider.refresh();
 }
+
+export function addGroup(state: State) {
+}
+
+export function editGroup(filterTreeItem: vscode.TreeItem, state: State) {
+}
+
+export function deleteGroup(filterTreeItem: vscode.TreeItem, state: State) {
+}

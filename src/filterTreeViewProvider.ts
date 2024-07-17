@@ -43,21 +43,21 @@ export class FilterItem extends vscode.TreeItem {
         if (filter.isHighlighted) {
             if (filter.isShown) {
                 this.description = ` · ${filter.count}`;
-                this.contextValue = 'lit-visible';
+                this.contextValue = 'f-lit-visible';
             } else {
                 this.description = '';
-                this.contextValue = 'lit-invisible';
+                this.contextValue = 'f-lit-invisible';
             }
         } else {
             this.description = '';
             if (filter.isShown) {
-                this.contextValue = 'unlit-visible';
+                this.contextValue = 'f-unlit-visible';
             } else {
-                this.contextValue = 'unlit-invisible';
+                this.contextValue = 'f-unlit-invisible';
             }
         }
     }
 
     //contextValue connects to package.json>menus>view/item/context
-    contextValue: 'lit-visible' | 'unlit-visible' | 'lit-invisible' | 'unlit-invisible';
+    contextValue: 'f-lit-visible' | 'f-unlit-visible' | 'f-lit-invisible' | 'f-unlit-invisible';
 }

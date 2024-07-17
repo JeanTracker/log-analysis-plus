@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Filter, cleanUpIconFiles } from "./utils";
 import { FilterTreeViewProvider } from "./filterTreeViewProvider";
-import { applyHighlight, deleteFilter, setVisibility, importFilters, turnOnFocusMode, exportFilters, addFilter, editFilter, setHighlight, refreshEditors } from "./commands";
+import { applyHighlight, deleteFilter, setVisibility, importFilters, turnOnFocusMode, exportFilters, addFilter, editFilter, setHighlight, refreshEditors, addGroup, editGroup, deleteGroup } from "./commands";
 import { FocusProvider } from "./focusProvider";
 //GLOBAL to be used for activate and deactivate
 let storageUri: vscode.Uri;
@@ -113,6 +113,24 @@ export function activate(context: vscode.ExtensionContext) {
         (filterTreeItem: vscode.TreeItem) => setHighlight(false, filterTreeItem, state)
     );
     context.subscriptions.push(disposibleDisableHighlight);
+
+    let disposibleAddGroup = vscode.commands.registerCommand(
+        "log-analysis-plus.addGroup",
+        () => addGroup(state)
+    );
+    context.subscriptions.push(disposibleAddGroup);
+
+    let disposibleEditGroup = vscode.commands.registerCommand(
+        "log-analysis-plus.editGroup",
+        (filterTreeItem: vscode.TreeItem) => editGroup(filterTreeItem, state)
+    );
+    context.subscriptions.push(disposibleEditGroup);
+
+    let disposibleDeleteGroup = vscode.commands.registerCommand(
+        "log-analysis-plus.deleteGroup",
+        (filterTreeItem: vscode.TreeItem) => deleteGroup(filterTreeItem, state)
+    );
+    context.subscriptions.push(disposibleDeleteGroup);
 }
 
 
