@@ -40,7 +40,7 @@ export function writeSvgContent(filter: Filter, treeViewProvider: FilterTreeView
     vscode.workspace.fs.writeFile(filter.iconPath, str2Uint8(filter.isHighlighted ? fullSvg : emptySvg)).then(() => {
         console.log("before refresh");
         console.log(filter.iconPath);
-        treeViewProvider.refresh();
+        treeViewProvider.refreshFilter(filter);
     });
 }
 

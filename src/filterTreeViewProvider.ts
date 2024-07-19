@@ -28,9 +28,21 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.Tr
     private _onDidChangeTreeData: vscode.EventEmitter<vscode.TreeItem | undefined> = new vscode.EventEmitter<vscode.TreeItem | undefined>();
     readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | undefined> = this._onDidChangeTreeData.event;
 
-    refresh(): void {
-        console.log("in refresh");
-        this._onDidChangeTreeData.fire(undefined);
+    refreshFilter(filter: Filter): void {
+        const filterItem = this.filterItemCache.get(filter.id);
+        if (filterItem !== undefined) {
+            filterItem.update(filter);
+            this.refresh(filterItem);
+        }
+    }
+
+    refresh(element?: vscode.TreeItem): void {
+        if (element === undefined) {
+            console.log("refresh all");
+        } else {
+            console.log("refresh item");
+        }
+        this._onDidChangeTreeData.fire(element);
     }
 
     getNewGroupItem(group: Group): GroupItem {

@@ -226,6 +226,7 @@ export function setHighlight(isHighlighted: boolean, treeItem: vscode.TreeItem, 
             filter.iconPath = generateSvgUri(state.storageUri, filter.id, filter.isHighlighted);
             writeSvgContent(filter, state.filterTreeViewProvider);
         });
+        refreshTreeView(state);
     } else {
         state.groupArr.map(group => {
             const filter = group.filterArr.find(filter => (filter.id === id));
