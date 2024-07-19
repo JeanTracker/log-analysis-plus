@@ -1,27 +1,29 @@
 import * as vscode from 'vscode';
-import { Filter } from "./utils";
+import { Filter, Group } from "./utils";
 
 //provides filters as tree items to be displayed on the sidebar
-export class FilterTreeViewProvider implements vscode.TreeDataProvider<FilterItem> {
+export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+    constructor(private groupArr: Group[]) { }
 
-    constructor(private filterArr: Filter[]) { }
-
-    getTreeItem(element: FilterItem): vscode.TreeItem {
+    getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
         return element;
     }
 
-    //getChildren(filterItem) returns empty list because filters have no children.
+    //getChildren(vscode.TreeItem) returns empty list because filters have no children.
     //getChildren() returns the root elements (all the filters)
-    getChildren(element?: FilterItem): FilterItem[] {
-        if (element) {
-            return [];
-        } else { // root
-            return this.filterArr.map(filter => new FilterItem(filter));
+    getChildren(element?: vscode.TreeItem): Thenable<vscode.TreeItem[]> {
+        if (element === undefined) {
+            return Promise.resolve(this.groupArr.map(group => new GroupItem(group)));
+        }
+        if (element instanceof GroupItem) {
+            return Promise.resolve(element.filterArr.map(filter => new FilterItem(filter)));
+        } else {
+            return Promise.resolve([]);
         }
     }
 
-    private _onDidChangeTreeData: vscode.EventEmitter<FilterItem | undefined> = new vscode.EventEmitter<FilterItem | undefined>();
-    readonly onDidChangeTreeData: vscode.Event<FilterItem | undefined> = this._onDidChangeTreeData.event;
+    private _onDidChangeTreeData: vscode.EventEmitter<vscode.TreeItem | undefined> = new vscode.EventEmitter<vscode.TreeItem | undefined>();
+    readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | undefined> = this._onDidChangeTreeData.event;
 
     refresh(): void {
         console.log("in refresh");
@@ -29,13 +31,43 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<FilterIte
     }
 }
 
+export class GroupItem extends vscode.TreeItem {
+    filterArr: Filter[] = [];
+
+    constructor(
+        group: Group,
+    ) {
+        super(group.name, vscode.TreeItemCollapsibleState.Collapsed);
+        this.id = group.id;
+        this.filterArr = group.filterArr;
+
+        if (group.isHighlighted) {
+            if (group.isShown) {
+                this.contextValue = 'g-lit-visible';
+            } else {
+                this.description = '';
+                this.contextValue = 'g-lit-invisible';
+            }
+        } else {
+            this.description = '';
+            if (group.isShown) {
+                this.contextValue = 'g-unlit-visible';
+            } else {
+                this.contextValue = 'g-unlit-invisible';
+            }
+        }
+    }
+
+    //contextValue connects to package.json>menus>view/item/context
+    contextValue: 'g-lit-visible' | 'g-unlit-visible' | 'g-lit-invisible' | 'g-unlit-invisible';
+}
+
 //represents a filter as one row in the sidebar
 export class FilterItem extends vscode.TreeItem {
-
     constructor(
         filter: Filter,
     ) {
-        super(filter.regex.toString());
+        super(filter.regex.toString(), vscode.TreeItemCollapsibleState.None);
         this.label = filter.regex.toString();
         this.id = filter.id;
         this.iconPath = filter.iconPath;

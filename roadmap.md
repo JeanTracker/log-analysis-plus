@@ -4,6 +4,6 @@
 - [X] Add support for editing
 - [ ] file specific filters
 - [X] support for analysis of huge files (>50MB)
-- [ ] support for control filters by group
+- [X] support for control filters by group
 - [ ] support for managing groups by project
 - [ ] support for exclude filters
