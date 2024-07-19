@@ -3,6 +3,9 @@ import { Filter, Group } from "./utils";
 
 //provides filters as tree items to be displayed on the sidebar
 export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+    private groupItemCache: Map<string, GroupItem> = new Map();
+    private filterItemCache: Map<string, FilterItem> = new Map();
+
     constructor(private groupArr: Group[]) { }
 
     getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
@@ -13,10 +16,10 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.Tr
     //getChildren() returns the root elements (all the filters)
     getChildren(element?: vscode.TreeItem): Thenable<vscode.TreeItem[]> {
         if (element === undefined) {
-            return Promise.resolve(this.groupArr.map(group => new GroupItem(group)));
+            return Promise.resolve(this.groupArr.map(group => this.getNewGroupItem(group)));
         }
         if (element instanceof GroupItem) {
-            return Promise.resolve(element.filterArr.map(filter => new FilterItem(filter)));
+            return Promise.resolve(element.filterArr.map(filter => this.getNewFilterItem(filter)));
         } else {
             return Promise.resolve([]);
         }
@@ -29,6 +32,28 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.Tr
         console.log("in refresh");
         this._onDidChangeTreeData.fire(undefined);
     }
+
+    getNewGroupItem(group: Group): GroupItem {
+        let groupItem = this.groupItemCache.get(group.id);
+        if (groupItem === undefined) {
+            groupItem = new GroupItem(group);
+            this.groupItemCache.set(group.id, groupItem);
+        } else {
+            groupItem.update(group);
+        }
+        return groupItem;
+    }
+
+    getNewFilterItem(filter: Filter): FilterItem {
+        let filterItem = this.filterItemCache.get(filter.id);
+        if (filterItem === undefined) {
+            filterItem = new FilterItem(filter);
+            this.filterItemCache.set(filter.id, filterItem);
+        } else {
+            filterItem.update(filter);
+        }
+        return filterItem;
+    }
 }
 
 export class GroupItem extends vscode.TreeItem {
@@ -38,6 +63,12 @@ export class GroupItem extends vscode.TreeItem {
         group: Group,
     ) {
         super(group.name, vscode.TreeItemCollapsibleState.Collapsed);
+        this.contextValue = 'g-unlit-invisible';
+        this.update(group);
+    }
+
+    update(group: Group) {
+        this.label = group.name;
         this.id = group.id;
         this.filterArr = group.filterArr;
 
@@ -68,6 +99,11 @@ export class FilterItem extends vscode.TreeItem {
         filter: Filter,
     ) {
         super(filter.regex.toString(), vscode.TreeItemCollapsibleState.None);
+        this.contextValue = 'f-unlit-invisible';
+        this.update(filter);
+    }
+
+    update(filter: Filter) {
         this.label = filter.regex.toString();
         this.id = filter.id;
         this.iconPath = filter.iconPath;
