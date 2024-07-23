@@ -6,7 +6,7 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.Tr
     private groupItemCache: Map<string, GroupItem> = new Map();
     private filterItemCache: Map<string, FilterItem> = new Map();
 
-    constructor(private groupArr: Group[]) { }
+    constructor(private groups: Group[]) { }
 
     getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
         return element;
@@ -16,10 +16,10 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.Tr
     //getChildren() returns the root elements (all the filters)
     getChildren(element?: vscode.TreeItem): Thenable<vscode.TreeItem[]> {
         if (element === undefined) {
-            return Promise.resolve(this.groupArr.map(group => this.getNewGroupItem(group)));
+            return Promise.resolve(this.groups.map(group => this.getNewGroupItem(group)));
         }
         if (element instanceof GroupItem) {
-            return Promise.resolve(element.filterArr.map(filter => this.getNewFilterItem(filter)));
+            return Promise.resolve(element.filters.map(filter => this.getNewFilterItem(filter)));
         } else {
             return Promise.resolve([]);
         }
@@ -43,6 +43,11 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.Tr
             console.log("refresh item");
         }
         this._onDidChangeTreeData.fire(element);
+    }
+
+    update(groups: Group[]): void {
+        this.groups = groups;
+        this.refresh();
     }
 
     getNewGroupItem(group: Group): GroupItem {
@@ -69,7 +74,7 @@ export class FilterTreeViewProvider implements vscode.TreeDataProvider<vscode.Tr
 }
 
 export class GroupItem extends vscode.TreeItem {
-    filterArr: Filter[] = [];
+    filters: Filter[] = [];
 
     constructor(
         group: Group,
@@ -82,7 +87,7 @@ export class GroupItem extends vscode.TreeItem {
     update(group: Group) {
         this.label = group.name;
         this.id = group.id;
-        this.filterArr = group.filterArr;
+        this.filters = group.filters;
 
         if (group.isHighlighted) {
             if (group.isShown) {
@@ -124,16 +129,20 @@ export class FilterItem extends vscode.TreeItem {
             if (filter.isShown) {
                 this.description = ` · ${filter.count}`;
                 this.contextValue = 'f-lit-visible';
+                this.iconPath = new vscode.ThemeIcon("bracket-dot");
             } else {
                 this.description = '';
                 this.contextValue = 'f-lit-invisible';
+                this.iconPath = new vscode.ThemeIcon("bracket-error");
             }
         } else {
             this.description = '';
             if (filter.isShown) {
                 this.contextValue = 'f-unlit-visible';
+                this.iconPath = new vscode.ThemeIcon("bracket");
             } else {
                 this.contextValue = 'f-unlit-invisible';
+                this.iconPath = undefined;
             }
         }
     }

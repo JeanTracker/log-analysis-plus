@@ -33,10 +33,6 @@ If one line matches multiple regex, because the highlight will overwrite themsel
 
 You can use ```log-analysis.turnOnFocusMode``` command to activate focus mode for the active editor. The command has a default shortcut: ```ctrl/cmd + h```, or the second icon located on the top of the tab can achieve the same goal. And as the focus mode is just another tab, you can close focus mode as how you close any vscode tab.
 
-### Import and Export
-
-The filters can be imported and exported as json files. Related commands are ```log-analysis.exportFilters``` and ```log-analysis.importFilters``` and the ... icon on the top of the tab can achieve the same goal.
-
 ## Handling Huge Files
 
 In VS Code, when opening files larger than 50MB, the use of extensions is restricted to ensure performance and memory efficiency. This limitation helps maintain a responsive and stable environment when handling large files. More details on this can be found in [#31078](https://github.com/microsoft/vscode/issues/31078). By using the extension below, you can enable extension functionality when opening large files, allowing for log analysis.

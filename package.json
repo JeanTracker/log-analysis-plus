@@ -19,12 +19,6 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"viewsWelcome": [
-			{
-				"view": "filters.plus",
-				"contents": "No group filters found.\n [Add Group](command:log-analysis-plus.addGroup)"
-			}
-		],
 		"commands": [
 			{
 				"command": "log-analysis-plus.addGroup",
@@ -82,12 +76,33 @@
 				"icon": "$(plus)"
 			},
 			{
-				"command": "log-analysis-plus.exportFilters",
-				"title": "Export Filters"
+				"command": "log-analysis-plus.deleteProject",
+				"title": "Delete This Project",
+				"icon": "$(dialog-close)"
 			},
 			{
-				"command": "log-analysis-plus.importFilters",
-				"title": "Import Filters"
+				"command": "log-analysis-plus.addProject",
+				"title": "Add Project",
+				"icon": "$(repo-create)"
+			},
+			{
+				"command": "log-analysis-plus.openSettings",
+				"title": "Open Settings",
+				"icon": "$(gear)"
+			},
+			{
+				"command": "log-analysis-plus.refreshSettings",
+				"title": "Refresh",
+				"icon": "$(refresh)"
+			},
+			{
+				"command": "log-analysis-plus.saveProject",
+				"title": "Save groups to project",
+				"icon": "$(save-as)"
+			},
+			{
+				"command": "log-analysis-plus.selectProject",
+				"title": "Select project"
 			}
 		],
 		"menus": {
@@ -136,6 +151,11 @@
 					"command": "log-analysis-plus.deleteFilter",
 					"when": "view == filters.plus && viewItem =~ /^f-/",
 					"group": "inline@5"
+				},
+				{
+					"command": "log-analysis-plus.deleteProject",
+					"when": "view == filters.plus.settings",
+					"group": "inline@5"
 				}
 			],
 			"view/title": [
@@ -150,12 +170,24 @@
 					"group": "navigation@2"
 				},
 				{
-					"command": "log-analysis-plus.importFilters",
-					"when": "view == filters.plus"
+					"command": "log-analysis-plus.saveProject",
+					"when": "view == filters.plus",
+					"group": "navigation@3"
 				},
 				{
-					"command": "log-analysis-plus.exportFilters",
-					"when": "view == filters.plus"
+					"command": "log-analysis-plus.addProject",
+					"when": "view == filters.plus.settings",
+					"group": "navigation@1"
+				},
+				{
+					"command": "log-analysis-plus.openSettings",
+					"when": "view == filters.plus.settings",
+					"group": "navigation@2"
+				},
+				{
+					"command": "log-analysis-plus.refreshSettings",
+					"when": "view == filters.plus.settings",
+					"group": "navigation@3"
 				}
 			]
 		},
@@ -171,6 +203,21 @@
 				{
 					"id": "filters.plus",
 					"name": "Filters+"
+				}
+			],
+			"filter_group_setting": [
+				{
+					"id": "filters.plus.settings",
+					"name": "Projects"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "filter_group_setting",
+					"title": "Log Analysis+",
+					"icon": "$(preview)"
 				}
 			]
 		}
