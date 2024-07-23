@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Project, Group, cleanUpIconFiles } from "./utils";
+import { Project, Group } from "./utils";
 import { FilterTreeViewProvider } from "./filterTreeViewProvider";
 import { ProjectTreeViewProvider } from "./projectTreeViewProvider";
 import { applyHighlight, deleteFilter, setVisibility, turnOnFocusMode, addFilter, editFilter, setHighlight, refreshEditors, addGroup, editGroup, deleteGroup, saveProject, addProject, deleteProject, refreshSettings, projectSelected } from "./commands";
@@ -24,7 +24,6 @@ export type State = {
 
 export function activate(context: vscode.ExtensionContext) {
     storageUri = context.globalStorageUri; //get the store path
-    cleanUpIconFiles(storageUri); //clean up the old icon files
 
     const projects: Project[] = [];
     const groups: Group[] = [];
@@ -246,5 +245,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    cleanUpIconFiles(storageUri);
 }

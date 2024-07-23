@@ -39,10 +39,6 @@ In VS Code, when opening files larger than 50MB, the use of extensions is restri
 
 It works well with [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/mbehr1.vsc-lfs?color=green&label=vsc-lfs&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=mbehr1.vsc-lfs) to handle large log files.
 
-## Known Issues
-
-The circle icon for the newly added filter may not show up properly right after the filter gets created. You can toggle ```isHighlighed``` by clicking the paint bucket icon to solve this bug. Sorry!
-
 ## Release Notes
 
 ### 1.1.0

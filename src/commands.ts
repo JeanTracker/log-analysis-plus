@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { State } from "./extension";
-import { Group, generateSvgUri, writeSvgContent, generateRandomColor } from "./utils";
+import { generateRandomColor } from "./utils";
 import { readSettings, saveSettings } from "./settings";
 
 export function applyHighlight(state: State, editors: vscode.TextEditor[]): void {
@@ -115,12 +115,9 @@ export function addFilter(treeItem: vscode.TreeItem, state: State) {
             regex: new RegExp(regexStr),
             color: generateRandomColor(),
             id,
-            iconPath: generateSvgUri(state.storageUri, id, true),
             count: 0
         };
         group!.filters.push(filter);
-        //the order of the following two lines is deliberate (due to some unknown reason of async dependencies...)
-        writeSvgContent(filter, state.filterTreeViewProvider);
         refreshEditors(state);
     });
 }
@@ -151,8 +148,6 @@ export function setHighlight(isHighlighted: boolean, treeItem: vscode.TreeItem, 
         group.isHighlighted = isHighlighted;
         group.filters.map(filter => {
             filter.isHighlighted = isHighlighted;
-            filter.iconPath = generateSvgUri(state.storageUri, filter.id, filter.isHighlighted);
-            writeSvgContent(filter, state.filterTreeViewProvider);
         });
         refreshFilterTreeView(state);
     } else {
@@ -160,8 +155,6 @@ export function setHighlight(isHighlighted: boolean, treeItem: vscode.TreeItem, 
             const filter = group.filters.find(filter => (filter.id === id));
             if (filter !== undefined) {
                 filter.isHighlighted = isHighlighted;
-                filter.iconPath = generateSvgUri(state.storageUri, filter.id, filter.isHighlighted);
-                writeSvgContent(filter, state.filterTreeViewProvider);
             }
         });
     }

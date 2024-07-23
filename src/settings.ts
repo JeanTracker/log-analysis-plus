@@ -3,7 +3,7 @@ import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs';
 import { State } from "./extension";
-import { Project, Group, Filter, generateSvgUri } from './utils';
+import { Project, Group, Filter } from './utils';
 
 const settingFilename: string = path.join(os.homedir(), 'vscode_log_analysis_plus.json');
 let extStorageUri: vscode.Uri;
@@ -50,7 +50,6 @@ export function readSettings(storageUri?: vscode.Uri): Project[] {
                             isHighlighted: false,
                             isShown: false,
                             id: filterId,
-                            iconPath: generateSvgUri(extStorageUri, filterId, f.isHighlighted),
                             count: 0
                         };
                         group.filters.push(filter);
