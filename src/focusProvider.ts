@@ -8,7 +8,7 @@ import { Filter, Group } from "./utils";
 export class FocusProvider implements vscode.TextDocumentContentProvider {
     groups: Group[];
 
-    constructor(groups: Group[]) {
+    constructor(groups: Group[], private exFilters: Filter[]) {
         this.groups = groups;
     }
 
@@ -29,7 +29,10 @@ export class FocusProvider implements vscode.TextDocumentContentProvider {
                     }
                     let regex = filter.regex;
                     if (regex.test(line)) {
-                        results.push(line);
+                        const isExcluded = this.exFilters.some(exFilter => exFilter.isShown && exFilter.regex.test(line));
+                        if (!isExcluded) {
+                            results.push(line);
+                        }
                         break;
                     }
                 }

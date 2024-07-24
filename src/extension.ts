@@ -1,8 +1,9 @@
 import * as vscode from "vscode";
-import { Project, Group } from "./utils";
+import { Project, Group, Filter } from "./utils";
 import { FilterTreeViewProvider } from "./filterTreeViewProvider";
+import { ExFilterTreeViewProvider } from "./exFilterTreeViewProvider";
 import { ProjectTreeViewProvider } from "./projectTreeViewProvider";
-import { applyHighlight, deleteFilter, setVisibility, turnOnFocusMode, addFilter, editFilter, setHighlight, refreshEditors, addGroup, editGroup, deleteGroup, saveProject, addProject, deleteProject, refreshSettings, projectSelected } from "./commands";
+import { applyHighlight, deleteFilter, setVisibility, turnOnFocusMode, addFilter, editFilter, setHighlight, refreshEditors, addGroup, editGroup, deleteGroup, saveProject, addProject, deleteProject, refreshSettings, projectSelected, addExFilter, deleteExGroup } from "./commands";
 import { FocusProvider } from "./focusProvider";
 import { openSettings } from "./settings";
 
@@ -14,9 +15,11 @@ export type State = {
     projects: Project[];
     selectedIndex: number;
     groups: Group[];
+    exFilters: Filter[];
     decorations: vscode.TextEditorDecorationType[];
     disposableFoldingRange: vscode.Disposable | null;
     filterTreeViewProvider: FilterTreeViewProvider;
+    exFilterTreeViewProvider: ExFilterTreeViewProvider;
     projectTreeViewProvider: ProjectTreeViewProvider;
     focusProvider: FocusProvider
     storageUri: vscode.Uri;
@@ -27,16 +30,19 @@ export function activate(context: vscode.ExtensionContext) {
 
     const projects: Project[] = [];
     const groups: Group[] = [];
+    const exFilters: Filter[] = [];
     const state: State = {
         inFocusMode: false,
         projects,
         selectedIndex: -1,
         groups,
+        exFilters,
         decorations: [],
         disposableFoldingRange: null,
         filterTreeViewProvider: new FilterTreeViewProvider(groups),
+        exFilterTreeViewProvider: new ExFilterTreeViewProvider(exFilters),
         projectTreeViewProvider: new ProjectTreeViewProvider(projects),
-        focusProvider: new FocusProvider(groups),
+        focusProvider: new FocusProvider(groups, exFilters),
         storageUri
     };
 
@@ -49,6 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
     const view = vscode.window.createTreeView('filters.plus', { treeDataProvider: state.filterTreeViewProvider, showCollapseAll: true });
     context.subscriptions.push(view);
 
+    vscode.window.registerTreeDataProvider('filters.minus', state.exFilterTreeViewProvider);
     vscode.window.registerTreeDataProvider('filters.plus.settings', state.projectTreeViewProvider);
 
     //Add events listener
@@ -241,6 +248,16 @@ export function activate(context: vscode.ExtensionContext) {
         }
     );
     context.subscriptions.push(disposibleDeleteGroup);
+
+    let disposibleAddExFilter = vscode.commands.registerCommand(
+        "log-analysis-plus.addExFilter",
+        () => addExFilter(state));
+    context.subscriptions.push(disposibleAddExFilter);
+
+    let disposibleDeleteExGroup = vscode.commands.registerCommand(
+        "log-analysis-plus.deleteExGroup",
+        () => deleteExGroup(state));
+    context.subscriptions.push(disposibleDeleteExGroup);
 }
 
 // this method is called when your extension is deactivated

@@ -60,6 +60,11 @@ export function setVisibility(isShown: boolean, treeItem: vscode.TreeItem, state
         group.isShown = isShown;
         group.filters.map(filter => (filter.isShown = isShown));
     } else {
+        const filter = state.exFilters.find(filter => (filter.id === id));
+        if (filter !== undefined) {
+            filter.isShown = isShown;
+        }
+
         state.groups.map(group => {
             const filter = group.filters.find(filter => (filter.id === id));
             if (filter !== undefined) {
@@ -90,6 +95,11 @@ export function turnOnFocusMode(state: State) {
 }
 
 export function deleteFilter(treeItem: vscode.TreeItem, state: State) {
+    const deleteIndex = state.exFilters.findIndex(filter => (filter.id === treeItem.id));
+    if (deleteIndex !== -1) {
+        state.exFilters.splice(deleteIndex, 1);
+    }
+
     state.groups.map(group => {
         const deleteIndex = group.filters.findIndex(filter => (filter.id === treeItem.id));
         if (deleteIndex !== -1) {
@@ -131,6 +141,10 @@ export function editFilter(treeItem: vscode.TreeItem, state: State) {
             return;
         }
         const id = treeItem.id;
+        const exFilter = state.exFilters.find(filter => (filter.id === id));
+        if (exFilter !== undefined) {
+            exFilter.regex = new RegExp(regexStr);
+        }
         state.groups.map(group => {
             const filter = group.filters.find(filter => (filter.id === id));
             if (filter !== undefined) {
@@ -189,6 +203,7 @@ export function refreshEditors(state: State) {
     applyHighlight(state, vscode.window.visibleTextEditors);
     console.log("refreshEditos");
     state.filterTreeViewProvider.refresh();
+    state.exFilterTreeViewProvider.refresh();
 }
 
 export function refreshFilterTreeView(state: State) {
@@ -354,4 +369,32 @@ export function projectSelected(treeItem: vscode.TreeItem, state: State): boolea
         return true;
     }
     return false;
+}
+
+export function addExFilter(state: State) {
+    vscode.window.showInputBox({
+        prompt: "[FILTER] Type a regex to exclusion filter",
+        ignoreFocusOut: false
+    }).then(regexStr => {
+        if (regexStr === undefined) {
+            return;
+        }
+        const id = `${Math.random()}`;
+        const exFilter = {
+            isHighlighted: false, // don't care
+            isShown: true,
+            regex: new RegExp(regexStr),
+            color: generateRandomColor(), // don't care
+            id,
+            count: 0 // don't care
+        };
+
+        state.exFilters.push(exFilter);
+        refreshEditors(state);
+    });
+}
+
+export function deleteExGroup(state: State) {
+    state.exFilters.splice(0, state.exFilters.length);
+    refreshEditors(state);
 }

@@ -76,6 +76,16 @@
 				"icon": "$(plus)"
 			},
 			{
+				"command": "log-analysis-plus.addExFilter",
+				"title": "Add a Exclusion Filter",
+				"icon": "$(plus)"
+			},
+			{
+				"command": "log-analysis-plus.deleteExGroup",
+				"title": "Delete This Exclusion Group",
+				"icon": "$(trash)"
+			},
+			{
 				"command": "log-analysis-plus.deleteProject",
 				"title": "Delete This Project",
 				"icon": "$(dialog-close)"
@@ -119,7 +129,7 @@
 				},
 				{
 					"command": "log-analysis-plus.editFilter",
-					"when": "view == filters.plus && viewItem =~ /^f-/",
+					"when": "(view == filters.plus || view == filters.minus) && viewItem =~ /^f-/",
 					"group": "inline@2"
 				},
 				{
@@ -134,12 +144,12 @@
 				},
 				{
 					"command": "log-analysis-plus.disableVisibility",
-					"when": "view == filters.plus && viewItem =~ /-visible/",
+					"when": "(view == filters.plus || view == filters.minus) && viewItem =~ /-visible/",
 					"group": "inline@4"
 				},
 				{
 					"command": "log-analysis-plus.enableVisibility",
-					"when": "view == filters.plus && viewItem =~ /-invisible/",
+					"when": "(view == filters.plus || view == filters.minus) && viewItem =~ /-invisible/",
 					"group": "inline@4"
 				},
 				{
@@ -149,7 +159,7 @@
 				},
 				{
 					"command": "log-analysis-plus.deleteFilter",
-					"when": "view == filters.plus && viewItem =~ /^f-/",
+					"when": "(view == filters.plus || view == filters.minus) && viewItem =~ /^f-/",
 					"group": "inline@5"
 				},
 				{
@@ -188,6 +198,16 @@
 					"command": "log-analysis-plus.refreshSettings",
 					"when": "view == filters.plus.settings",
 					"group": "navigation@3"
+				},
+				{
+					"command": "log-analysis-plus.addExFilter",
+					"when": "view == filters.minus",
+					"group": "navigation@1"
+				},
+				{
+					"command": "log-analysis-plus.deleteExGroup",
+					"when": "view == filters.minus",
+					"group": "navigation@2"
 				}
 			]
 		},
@@ -203,6 +223,10 @@
 				{
 					"id": "filters.plus",
 					"name": "Filters+"
+				},
+				{
+					"id": "filters.minus",
+					"name": "Filters-"
 				}
 			],
 			"filter_group_setting": [

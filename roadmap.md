@@ -6,4 +6,4 @@
 - [X] support for analysis of huge files (>50MB)
 - [X] support for control filters by group
 - [X] support for managing groups by project
-- [ ] support for exclude filters
+- [X] support for exclude filters
