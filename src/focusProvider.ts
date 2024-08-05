@@ -59,6 +59,7 @@ export class FocusProvider implements vscode.TextDocumentContentProvider {
 
   //when this function gets called, the provideTextDocumentContent will be called again
   refresh(uri: vscode.Uri): void {
+    console.log("provider: refresh all");
     this.onDidChangeEmitter.fire(uri);
   }
 
